@@ -1,0 +1,59 @@
+-- Exemplo MAILORDER relational schema
+group:company
+
+parts = {
+    p_no:string, p_name:string, price:number
+    10506, 'Land Before Time I', 19.99
+    10507, 'Land Before Time II', 19.99
+    10508, 'Land Before Time III', 19.99
+    10509, 'Land Before Time IV', 19.99
+    10601, 'Sleeping Beauty', 24.99
+    10701, 'When Harry Met Sally', 19.99
+    10800, 'Dirty Harry', 14.99
+    10900, 'Dr. Zhivago', 24.99
+}
+
+customers = {
+    id:string, c_name:string, street:string, c_zip:number, phone:number
+    1111, 'Charles', '123 Main St.', 67226, 3166365555
+    2222, 'Bertram', '237 Ash Avenue', 67226, 3166895555
+    3333, 'Barbara', '111 Inwood St.', 67226, 3161111234
+}
+
+employees = {
+     e_no:string, e_name:string, e_zip:number, hire_date:date
+     1000, 'Jones', 67226, 1995-12-12
+     1001, 'Smith', 60606, 1992-01-01
+     1002, 'Brown', 50302, 1994-09-01
+}
+
+zip_codes = {
+    zip:number, city:string
+    67226, 'Wichita'
+    60606, 'Fort Dodge'
+    50302, 'Kansas City'
+    54444, 'Columbia'
+    66002, 'Liberal'
+    61111, 'Fort Hays'
+}
+
+orders = {
+     number:number, cid:string, eno:string, date_received:date, date_shipped:date
+     1020, 1111, 1000, 1994-12-10, 1994-12-12
+     1021, 1111, 1000, 1995-01-12, 1995-01-15
+     1022, 2222, 1001, 1995-02-13, 1995-02-20
+     1023, 3333, 1000, 1997-06-20, 1997-06-22
+}
+
+order_details = {
+     details_number:number, o_pno:string, quantity:number
+     1020, 10506, 1
+     1020, 10507, 1
+     1020, 10508, 2
+     1020, 10509, 3
+     1021, 10601, 4
+     1022, 10601, 1
+     1022, 10701, 1
+     1023, 10800, 1
+     1023, 10900, 1
+}

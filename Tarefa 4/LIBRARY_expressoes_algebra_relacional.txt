@@ -1,0 +1,32 @@
+-- a. How many copies of the book titled ‘The Lost Tribe’ are owned by the library branch whose name is ‘Sharpstown’?
+T = σ title = 'The Lost Tribe' (book) SHARP =  
+σ branch_name = 'Sharpstown' (library_branch) RESULT = 
+π no_of_copies ( (T ⨝ SHARP) ⨝ (book_copies) )
+
+-- b. How many copies of the book titled The Lost Tribe are owned by each library branch? 
+T_ = σ title = 'The Lost Tribe' (book)
+RESULT_ = π title, branch_name, no__ofcopies 
+((T_ ⨯ library_branch) ⨝ (book_copies))
+
+-- c. Retrieve the names of all borrowers who do not have any books checked out. 
+null_book_loans = σ  date_out = 'null' (book_loans) RESULT_1 =
+π name (null_book_loans ⨝ borrower)
+
+-- d. For each book that is loaned out from the 'Sharpstown' branch and whose DueDate is today, retrieve the book title, the borrower's name, and the borrower's address. 
+SHARPS = σ branch_name = 'Sharpstown' (library_branch) DUE_TODAY = σ due_date = TODAY (book_loans) DUE_BOOK = ( SHARPS ⨝ book ) ⨝ DUE_TODAY RESULT_2 = π title, name, address (DUE_BOOK ⨝ borrower)
+
+-- e. For each library branch, retrieve the branch name and the total number of books loaned out from that branch.
+count_book_loans (branch_id, cnt) = branch_id ξ COUNT_book_id(book_loans) RESULT = 
+π branch_name, cnt (count_book_loans ⨝ library_branch)
+
+-- f. Retrieve the names, addresses, and number of books checked out for all borrowers who have more than five books checked out. 
+count_book_loans(Cno, cnt) = card_no ξ 
+COUNT book_id (book_loans) MORE =
+σ cnt > 5 (count_book_loans) RESULT = 
+π name, address, cnt(borrower Ⅹ MORE)
+
+-- g. For each book authored (or coauthored) by 'Stephen King,' retrieve the title and the number of copies owned by the library branch whose name is 'Central.' 
+CENTRAL = σ  branch_name = 'Central' (library_branch) AUTHOR =
+σ author_name = 'stephen king' (book_authors) 
+STEPHEN_BOOK = AUTHOR ⨝ BOOK  RESULT =
+π title, no_of_copies ((book_copies ⨝ CENTRAL) ⨝ STEPHEN_BOOK)

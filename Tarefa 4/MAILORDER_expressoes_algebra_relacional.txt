@@ -1,0 +1,60 @@
+-- a. Retrieve the names of parts that cost less than $20.00.
+π p_name σ price<20 (parts)
+
+-- b. Retrieve the names and cities of employees who have taken orders for parts costing more than
+$50.00.
+
+π e_name,city
+     (π e_name,e_zip (π eno (π details_number (σ price>50 (parts) join order_details) join orders) join employees) join zip_codes)
+		 
+-- c. Retrieve the pairs of customer number values of customers who live in the same ZIP Code.
+
+π c1,c2 (σ  c1 < c2 (
+  ρ c1,cn1,s1,z,p1 (customers) 
+  join 
+  ρ c2,cn2,s2,z,p2 (customers)
+))
+
+-- d. Retrieve the names of customers who have ordered parts from employees living in the city ‘Wichita’.
+
+
+π c_name (
+ customers 
+ join 
+ (π cid (orders join π e_no (employees join (zip_codes))) 
+   - 
+   π eno (orders join π e_no (employees join 
+                   σ city<>'Wichita' (zip_codes)))
+ )
+)
+
+-- e. Retrieve the names of customers who have ordered all parts costing less than $20.00.
+
+π c_name (customers join 
+ (π id (customers)) 
+ - 
+ (π cid
+   ((π id (customers) times π o_pno (σ price<20 (parts))) 
+  -
+   (π cid, o_pno (orders join odetails)))
+ )
+)
+
+-- f. Retrieve the names of customers who have not placed a single order.
+
+π c_name
+(customers join  π id (customers) 
+-
+π cid (orders))
+
+-- g. Retrieve the id, name and total amount spent in orders for all customers, given that the total cost of each order is the quantity multiplied by the price for every part in the order. Sort the result in descending order of total spent.
+
+π nome_aux
+(ρ id_aux, name_aux,sreet_aux,zip_aux,phone_aux (customers) 
+    join π id_aux (σ o1<>o2 (ρ o1,c,e1,r1,s1 (orders) 
+       join ρ o2,c,e2,r2,s2 (orders))) 
+    -
+    π id_aux
+    (σ o1<>o2 and o2<>o3 and o1<>o3 (ρ o1,c,e1,r1,s1 (orders) 
+     join ρ o2,c,e2,r2,s2 (orders) 
+       join ρ o3,c,e3,r3,s3 (orders))))
